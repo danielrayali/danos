@@ -1,22 +1,35 @@
 /* Declare constants for the multiboot header. */
-.set ALIGN,    1<<0             /* align loaded modules on page boundaries */
-.set MEMINFO,  1<<1             /* provide memory map */
-.set FLAGS,    ALIGN | MEMINFO  /* this is the Multiboot 'flag' field */
-.set MAGIC,    0x1BADB002       /* 'magic number' lets bootloader find the header */
-.set CHECKSUM, -(MAGIC + FLAGS) /* checksum of above, to prove we are multiboot */
+.set MULTIBOOT_MAGIC,    0x1BADB002       						/* 'magic number' lets bootloader find the header */
+.set MULTIBOOT_ALIGN,    0x1             						/* align loaded modules on page boundaries */
+.set MULTIBOOT_MEMINFO,  0x2             						/* provide memory map */
+.set multiboot_flags,    MULTIBOOT_ALIGN | MULTIBOOT_MEMINFO  	/* this is the Multiboot 'flag' field */
+.set multiboot_checksum, -(MULTIBOOT_MAGIC + multiboot_flags) 	/* checksum of above, to prove we are multiboot */
 
-/*
-Declare a multiboot header that marks the program as a kernel. These are magic
-values that are documented in the multiboot standard. The bootloader will
-search for this signature in the first 8 KiB of the kernel file, aligned at a
-32-bit boundary. The signature is in its own section so the header can be
-forced to be within the first 8 KiB of the kernel file.
-*/
+/**
+ * Declare a multiboot header that marks the program as a kernel. These are magic
+ * values that are documented in the multiboot standard. The bootloader will
+ * search for this signature in the first 8 KiB of the kernel file, aligned at a
+ * 32-bit boundary. The signature is in its own section so the header can be
+ * forced to be within the first 8 KiB of the kernel file.
+ */
 .section .multiboot
 .align 4
-.long MAGIC
-.long FLAGS
-.long CHECKSUM
+.long MULTIBOOT_MAGIC
+.long multiboot_flags
+.long multiboot_checksum
+
+; /* for MULTIBOOT_MEMORY_INFO */
+; .long 0x00000000    /* header_addr */
+; .long 0x00000000    /* load_addr */
+; .long 0x00000000    /* load_end_addr */
+; .long 0x00000000    /* bss_end_addr */
+; .long 0x00000000    /* entry_addr */
+
+; /* for MULTIBOOT_VIDEO_MODE */
+; .long 0x00000000    /* mode_type */
+; .long 1280          /* width */
+; .long 1024          /* height */
+; .long 32            /* depth */
 
 /*
 The multiboot standard does not define the value of the stack pointer register
