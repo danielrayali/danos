@@ -7,12 +7,11 @@ namespace danos {
 VgaTextModeBuffer::VgaTextModeBuffer(const VgaColor background, const VgaColor foreground) {
     this->Clear();
     this->SetColors(background, foreground);
-    this->SetCursor();
+    this->UpdateCursor();
 }
 
-void VgaTextModeBuffer::SetCursor() const {
+void VgaTextModeBuffer::UpdateCursor() const {
     const Uint16 pos = current_row_ * kVgaWidth + current_column_;
-
     IO::OutByte(0x3D4, 0x0F);
     IO::OutByte(0x3D5, (Uint8) (pos & 0xFF));
     IO::OutByte(0x3D4, 0x0E);
@@ -35,14 +34,14 @@ void VgaTextModeBuffer::Clear() {
     }
     current_column_ = 0;
     current_row_ = 0;
-    this->SetCursor();
+    this->UpdateCursor();
 }
 
 void VgaTextModeBuffer::Print(const char value) {
     if (value == '\n') {
         current_row_++;
         current_column_ = 0;
-        this->SetCursor();
+        this->UpdateCursor();
         return;
     }
 
@@ -57,7 +56,14 @@ void VgaTextModeBuffer::Print(const char value) {
             current_row_ = 0;  // Wrap around
         }
     }
-    this->SetCursor();
+    this->UpdateCursor();
+}
+
+void VgaTextModeBuffer::Print(const char* string) {
+    while (*string != '\0') {
+        this->Print(*string);
+        string++;
+    }
 }
 
 void VgaTextModeBuffer::Print(const char* string, const Uint32 length) {

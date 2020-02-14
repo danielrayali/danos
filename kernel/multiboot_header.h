@@ -1,6 +1,7 @@
 #pragma once
 
-#include <core/types.h>
+#include "core/types.h"
+#include "core/printer.h"
 
 namespace danos {
 
@@ -33,5 +34,34 @@ struct MultibootHeader {
     Uint32 height;
     Uint32 depth;
 };
+
+void PrintMultibootHeader(VgaTextModeBuffer& printer, MultibootHeader* header) {
+    printer.Print("Multiboot header:");
+    printer.Print("\n  magic: ");
+    PrintUint32(printer, &header->magic);
+    printer.Print("\n  flags: ");
+    PrintUint32(printer, &header->flags);
+    printer.Print("\n  checksum: ");
+    PrintUint32(printer, &header->checksum);
+    printer.Print("\n  header_addr: ");
+    PrintUint32(printer, &header->header_addr);
+    printer.Print("\n  load_addr: ");
+    PrintUint32(printer, &header->load_addr);
+    printer.Print("\n  load_end_addr: ");
+    PrintUint32(printer, &header->load_end_addr);
+    printer.Print("\n  bss_end_addr: ");
+    PrintUint32(printer, &header->bss_end_addr);
+    printer.Print("\n  entry_addr: ");
+    PrintUint32(printer, &header->entry_addr);
+    printer.Print("\n  mode_type: ");
+    PrintUint32(printer, &header->mode_type);
+    printer.Print("\n  width: ");
+    PrintUint32(printer, &header->width);
+    printer.Print("\n  height: ");
+    PrintUint32(printer, &header->height);
+    printer.Print("\n  depth: ");
+    PrintUint32(printer, &header->depth);
+    printer.Print('\n');
+}
 
 }  // namespace danos

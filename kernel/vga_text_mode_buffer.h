@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/types.h"
+#include "core/printer.h"
 
 namespace danos {
 
@@ -28,19 +29,19 @@ struct VgaTextModeData {
     Uint8 color;
 };
 
-class VgaTextModeBuffer {
+class VgaTextModeBuffer : public Printer {
  public:
-    VgaTextModeBuffer() = default;
-
     VgaTextModeBuffer(const VgaColor background, const VgaColor foreground);
 
     ~VgaTextModeBuffer() = default;
 
     void SetColors(const VgaColor background, const VgaColor foreground);
 
-    void Print(const char value);
+    void Print(const Char value) override;
 
-    void Print(const char* string, const Uint32 length);
+    void Print(const Char* string) override;
+
+    void Print(const Char* string, const Uint32 length) override;
 
     void Clear();
 
@@ -55,7 +56,8 @@ class VgaTextModeBuffer {
 
     Uint32 current_column_ = 0;
 
-    void SetCursor() const;
+    // Updates cursor to the current row and columns position
+    void UpdateCursor() const;
 };
 
 }  // namespace danos
