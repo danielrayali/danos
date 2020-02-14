@@ -35,7 +35,7 @@ struct MultibootHeader {
     Uint32 depth;
 };
 
-void PrintMultibootHeader(VgaTextModeBuffer& printer, MultibootHeader* header) {
+void PrintMultibootHeader(Printer& printer, MultibootHeader* header) {
     printer.Print("Multiboot header:");
     printer.Print("\n  magic: ");
     PrintUint32(printer, &header->magic);

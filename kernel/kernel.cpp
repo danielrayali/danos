@@ -19,4 +19,5 @@ extern "C" void kernel_main(void) {
 
     MultibootHeader *multiboot_header = reinterpret_cast<MultibootHeader*>(0x100000);
     PrintMultibootHeader(vga_buffer, multiboot_header);
+    PrintMultibootHeader(vga_buffer, multiboot_header);
 }

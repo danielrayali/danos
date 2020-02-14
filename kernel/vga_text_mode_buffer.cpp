@@ -37,10 +37,26 @@ void VgaTextModeBuffer::Clear() {
     this->UpdateCursor();
 }
 
+void VgaTextModeBuffer::IncreaseRow() {
+    if ((current_row_ + 1) == kVgaHeight) {
+        for (Uint32 i = 0; i < (kVgaHeight - 1); ++i) {
+            for (Uint32 j = 0; j < kVgaWidth; ++j) {
+                buffer_[i * kVgaWidth + j] = buffer_[(i + 1) * kVgaWidth + j];
+            }
+        }
+        for (Uint32 i = 0; i < kVgaWidth; ++i) {
+            buffer_[(kVgaHeight - 1) * kVgaWidth + i].value = ' ';
+        }
+    } else {
+        current_row_++;
+    }
+
+    current_column_ = 0;
+}
+
 void VgaTextModeBuffer::Print(const char value) {
     if (value == '\n') {
-        current_row_++;
-        current_column_ = 0;
+        this->IncreaseRow();
         this->UpdateCursor();
         return;
     }
@@ -48,14 +64,9 @@ void VgaTextModeBuffer::Print(const char value) {
     buffer_[current_row_ * kVgaWidth + current_column_].value = value;
     current_column_++;
     if (current_column_ == kVgaWidth) {
-        current_column_ = 0;
-        current_row_++;
-
-        // TODO(dali) Implement scrolling
-        if (current_row_ == kVgaHeight) {
-            current_row_ = 0;  // Wrap around
-        }
+        this->IncreaseRow();
     }
+
     this->UpdateCursor();
 }
 

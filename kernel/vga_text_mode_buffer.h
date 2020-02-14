@@ -58,6 +58,8 @@ class VgaTextModeBuffer : public Printer {
 
     // Updates cursor to the current row and columns position
     void UpdateCursor() const;
+
+    void IncreaseRow();
 };
 
 }  // namespace danos
