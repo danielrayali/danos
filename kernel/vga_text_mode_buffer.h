@@ -40,9 +40,6 @@ class VgaTextModeBuffer {
 
     void Print(const char value);
 
-    // Prints little endian integer
-    void Print(const Uint32 value);
-
     void Print(const char* string, const Uint32 length);
 
     void Clear();

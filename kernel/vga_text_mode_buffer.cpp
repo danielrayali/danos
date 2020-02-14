@@ -1,6 +1,6 @@
 #include "vga_text_mode_buffer.h"
 
-#include "IO.h"
+#include "io.h"
 
 namespace danos {
 
@@ -11,7 +11,7 @@ VgaTextModeBuffer::VgaTextModeBuffer(const VgaColor background, const VgaColor f
 }
 
 void VgaTextModeBuffer::SetCursor() const {
-    Uint16 pos = current_row_ * kVgaWidth + current_column_;
+    const Uint16 pos = current_row_ * kVgaWidth + current_column_;
 
     IO::OutByte(0x3D4, 0x0F);
     IO::OutByte(0x3D5, (Uint8) (pos & 0xFF));
@@ -46,7 +46,7 @@ void VgaTextModeBuffer::Print(const char value) {
         return;
     }
 
-    buffer_[current_row_ * kVgaHeight + current_column_].value = value;
+    buffer_[current_row_ * kVgaWidth + current_column_].value = value;
     current_column_++;
     if (current_column_ == kVgaWidth) {
         current_column_ = 0;
@@ -58,14 +58,6 @@ void VgaTextModeBuffer::Print(const char value) {
         }
     }
     this->SetCursor();
-}
-
-void VgaTextModeBuffer::Print(const Uint32 value) {
-    const char* ptr = reinterpret_cast<const char*>(&value) + 3;
-    for (Uint32 i = 0; i < sizeof(Uint32); ++i) {
-        this->Print(*ptr);
-        ptr--;
-    }
 }
 
 void VgaTextModeBuffer::Print(const char* string, const Uint32 length) {
