@@ -2,6 +2,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "vga_text_mode_buffer.h"
+
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -128,14 +130,16 @@ void print_integer(uint32_t* address) {
     }
 }
 
-extern "C" void kernel_main(void)
-{
+using namespace danos;
+
+extern "C" void kernel_main(void) {
     /* Initialize terminal interface */
-    terminal_initialize();
+    VgaTextModeBuffer vga_buffer(VgaColor::BLACK, VgaColor::LIGHT_GREEN);
+    vga_buffer.Print("Hello, World!", 13);
 
     /* Newline support is left as an exercise. */
-    terminal_writestring("Address 0x100000: ");
-    uint32_t *ptr = (uint32_t*)0x100000;
-    print_integer(ptr);
-    terminal_putchar('\n');
+    // terminal_writestring("Address 0x100000: ");
+    // uint32_t *ptr = (uint32_t*)0x100000;
+    // print_integer(ptr);
+    // terminal_putchar('\n');
 }
