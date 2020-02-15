@@ -1,11 +1,18 @@
-all: build
+OBJS = \
+	vga_text_mode_buffer.o \
+	kernel.o
 
-build:
+CC=../build/toolchain/opt/local/bin/i686-elf-gcc
+CXXFLAGS=-I../ -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib
+
+all: ../build/danos.bin
+
+%.o: %.cpp
+	$(CC) -c -o $@ $< $(CFLAGS) $(CXXFLAGS)
+
+../build/danos.bin: $(OBJS)
 	i686-elf-as boot.s -o boot.o
-	i686-elf-g++ -I../ -c vga_text_mode_buffer.cpp -o vga_text_mode_buffer.o -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti
-	i686-elf-g++ -I../ -c kernel.cpp -o kernel.o -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti
-	i686-elf-g++ -T linker.ld -o danos.bin -ffreestanding -O2 -nostdlib boot.o kernel.o vga_text_mode_buffer.o -lgcc
-	cp danos.bin ../build/
+	i686-elf-g++ -T linker.ld -o $@ -ffreestanding -O2 -nostdlib boot.o $(OBJS) -lgcc
 
 clean:
-	rm -rf *.o danos.bin
+	rm -rf *.o danos.bin ../build/danos.bin
