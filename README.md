@@ -27,6 +27,8 @@ make
 scripts/run-qemu.sh
 ```
 
+To quit the kernel, use `Ctrl + A, x`
+
 ## Build and run the ISO in QEMU
 
 ```bash

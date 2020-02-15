@@ -1,6 +1,8 @@
 #include "kernel/vga_text_mode_buffer.h"
 #include "kernel/multiboot_header.h"
 #include "core/printer.h"
+#include "kernel/bios_data.h"
+#include "kernel/serial_port.h"
 
 /* Check if the compiler thinks you are targeting the wrong operating system. */
 #if defined(__linux__)
@@ -19,5 +21,11 @@ extern "C" void kernel_main(void) {
 
     MultibootHeader *multiboot_header = reinterpret_cast<MultibootHeader*>(0x100000);
     PrintMultibootHeader(vga_buffer, multiboot_header);
-    PrintMultibootHeader(vga_buffer, multiboot_header);
+
+    vga_buffer.Print("Value @ 0x400: ");
+    BiosData bios_data;
+    PrintUint32(vga_buffer, bios_data.GetComPort(1));
+
+    SerialPort serial_port;
+    serial_port.Transmit("Hello, Serial World!\n");
 }

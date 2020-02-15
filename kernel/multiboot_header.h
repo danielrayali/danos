@@ -38,29 +38,29 @@ struct MultibootHeader {
 void PrintMultibootHeader(Printer& printer, MultibootHeader* header) {
     printer.Print("Multiboot header:");
     printer.Print("\n  magic: ");
-    PrintUint32(printer, &header->magic);
+    PrintUint32At(printer, &header->magic);
     printer.Print("\n  flags: ");
-    PrintUint32(printer, &header->flags);
+    PrintUint32At(printer, &header->flags);
     printer.Print("\n  checksum: ");
-    PrintUint32(printer, &header->checksum);
+    PrintUint32At(printer, &header->checksum);
     printer.Print("\n  header_addr: ");
-    PrintUint32(printer, &header->header_addr);
+    PrintUint32At(printer, &header->header_addr);
     printer.Print("\n  load_addr: ");
-    PrintUint32(printer, &header->load_addr);
+    PrintUint32At(printer, &header->load_addr);
     printer.Print("\n  load_end_addr: ");
-    PrintUint32(printer, &header->load_end_addr);
+    PrintUint32At(printer, &header->load_end_addr);
     printer.Print("\n  bss_end_addr: ");
-    PrintUint32(printer, &header->bss_end_addr);
+    PrintUint32At(printer, &header->bss_end_addr);
     printer.Print("\n  entry_addr: ");
-    PrintUint32(printer, &header->entry_addr);
+    PrintUint32At(printer, &header->entry_addr);
     printer.Print("\n  mode_type: ");
-    PrintUint32(printer, &header->mode_type);
+    PrintUint32At(printer, &header->mode_type);
     printer.Print("\n  width: ");
-    PrintUint32(printer, &header->width);
+    PrintUint32At(printer, &header->width);
     printer.Print("\n  height: ");
-    PrintUint32(printer, &header->height);
+    PrintUint32At(printer, &header->height);
     printer.Print("\n  depth: ");
-    PrintUint32(printer, &header->depth);
+    PrintUint32At(printer, &header->depth);
     printer.Print('\n');
 }
 
