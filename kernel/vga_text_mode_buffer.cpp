@@ -1,6 +1,7 @@
 #include "vga_text_mode_buffer.h"
 
-#include "io.h"
+#include "kernel/io.h"
+#include "core/types.h"
 
 namespace danos {
 
@@ -54,7 +55,7 @@ void VgaTextModeBuffer::IncreaseRow() {
     current_column_ = 0;
 }
 
-void VgaTextModeBuffer::Print(const char value) {
+void VgaTextModeBuffer::Print(const Char value) {
     if (value == '\n') {
         this->IncreaseRow();
         this->UpdateCursor();
