@@ -1,4 +1,4 @@
-#include "kernel/vga_text_mode_buffer.h"
+#include "kernel/vga_text_buffer.h"
 #include "kernel/multiboot_header.h"
 #include "core/printer.h"
 #include "kernel/bios_data.h"
@@ -16,16 +16,12 @@
 using namespace danos;
 
 extern "C" void kernel_main(void) {
-    VgaTextModeBuffer vga_buffer(VgaColor::BLACK, VgaColor::LIGHT_GREEN);
-    vga_buffer.Print("DanOS Bootloader v0.1.0\n\n", 25);
+    VgaTextBuffer vga_text_buffer(VgaColor::BLACK, VgaColor::LIGHT_GREEN);
+    vga_text_buffer.Print("DanOS Bootloader v0.1.0 (VGA)\n\n");
 
     MultibootHeader *multiboot_header = reinterpret_cast<MultibootHeader*>(0x100000);
-    PrintMultibootHeader(vga_buffer, multiboot_header);
-
-    vga_buffer.Print("Value @ 0x400: ");
-    BiosData bios_data;
-    PrintUint32(vga_buffer, bios_data.GetComPort(1));
+    PrintMultibootHeader(vga_text_buffer, multiboot_header);
 
     SerialPort serial_port;
-    serial_port.Transmit("Hello, Serial World!\n");
+    serial_port.Print("DanOS Bootloader v0.1.0 (serial)\n");
 }

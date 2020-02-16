@@ -24,24 +24,22 @@ enum class VgaColor : Uint8 {
     WHITE = 15
 };
 
-struct VgaTextModeData {
+struct VgaTextData {
     Uint8 value;
     Uint8 color;
 };
 
-class VgaTextModeBuffer : public Printer {
+class VgaTextBuffer : public Printer {
  public:
-    VgaTextModeBuffer(const VgaColor background, const VgaColor foreground);
+    VgaTextBuffer(const VgaColor background, const VgaColor foreground);
 
-    ~VgaTextModeBuffer() = default;
+    ~VgaTextBuffer() = default;
 
     void SetColors(const VgaColor background, const VgaColor foreground);
 
-    void Print(const Char value) override;
-
     void Print(const Char* string) override;
 
-    void Print(const Char* string, const Uint32 length) override;
+    void Print(const Char letter) override;
 
     void Clear();
 
@@ -50,7 +48,7 @@ class VgaTextModeBuffer : public Printer {
 
     static const Uint32 kVgaHeight = 25;
 
-    VgaTextModeData* buffer_ = reinterpret_cast<VgaTextModeData*>(0xB8000);
+    VgaTextData* buffer_ = reinterpret_cast<VgaTextData*>(0xB8000);
 
     Uint32 current_row_ = 0;
 

@@ -1,19 +1,23 @@
 #pragma once
 
 #include "core/types.h"
+#include "core/printer.h"
 
 namespace danos {
 
-class SerialPort {
- public:
+class SerialPort : public Printer{
+public:
     SerialPort();
 
-    ~SerialPort();
+    ~SerialPort() = default;
 
-    void Transmit(const Char* string);
+    void Print(const Char* string) override;
+
+    void Print(const Char letter) override;
 
     // TODO(dali) Receive keyboard input
- private:
+
+private:
     Uint16 io_port_;
 };
 

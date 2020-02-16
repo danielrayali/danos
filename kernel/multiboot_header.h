@@ -61,7 +61,7 @@ void PrintMultibootHeader(Printer& printer, MultibootHeader* header) {
     PrintUint32At(printer, &header->height);
     printer.Print("\n  depth: ");
     PrintUint32At(printer, &header->depth);
-    printer.Print('\n');
+    printer.Print("\n");
 }
 
 }  // namespace danos

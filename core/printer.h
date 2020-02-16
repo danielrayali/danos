@@ -20,12 +20,10 @@ inline Char ToHex(Uint32 value) {
 
 class Printer {
  public:
-    virtual void Print(const Char value) = 0;
-
     // Will attempt to find the length of the string
     virtual void Print(const Char* string) = 0;
 
-    virtual void Print(const Char* string, const Uint32 length) = 0;
+    virtual void Print(const Char letter) = 0;
 };
 
 inline void PrintUint32At(Printer& printer, Uint32* value) {

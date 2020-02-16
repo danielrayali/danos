@@ -9,13 +9,15 @@ SerialPort::SerialPort() {
     io_port_ = bios_data.GetComPort(1);
 }
 
-SerialPort::~SerialPort() {}
-
-void SerialPort::Transmit(const Char* string) {
+void SerialPort::Print(const Char* string) {
     while (*string != '\0') {
-        IO::OutByte(io_port_, *string);
+        this->Print(*string);
         string++;
     }
+}
+
+void SerialPort::Print(const Char letter) {
+    IO::OutByte(io_port_, letter);
 }
 
 }  // namespace danos
