@@ -2,10 +2,13 @@ OBJS = \
 	vga_text_buffer.o \
 	kernel.o \
 	bios_data.o \
-	serial_port.o
+	serial_port.o \
+	programmable_interrupt_controller.o \
+	interrupt_vector_table.o \
+	cpu.o
 
 CC=../build/toolchain/opt/local/bin/i686-elf-gcc
-CXXFLAGS=-I../ -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib -std=c++11
+CXXFLAGS=-I.. -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib -std=c++11 -masm=att -m64
 
 all: ../build/danos.bin
 

@@ -9,6 +9,10 @@ SerialPort::SerialPort() {
     io_port_ = bios_data.GetComPort(1);
 }
 
+Char SerialPort::Read() {
+    return IO::InByte(io_port_);
+}
+
 void SerialPort::Print(const Char* string) {
     while (*string != '\0') {
         this->Print(*string);

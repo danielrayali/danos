@@ -6,3 +6,4 @@
 - Fix string printing interfaces
 - Implement global constructors and destructors
 - Receive keyboard input
+- Clean up PIC code

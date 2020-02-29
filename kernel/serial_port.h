@@ -11,6 +11,8 @@ public:
 
     ~SerialPort() = default;
 
+    Char Read();
+
     void Print(const Char* string) override;
 
     void Print(const Char letter) override;

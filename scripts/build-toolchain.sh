@@ -17,7 +17,7 @@ if [ ! -d $GCC_DIR ]; then
 fi
 
 export PREFIX="$PWD/opt/local"
-export TARGET=i686-elf
+export TARGET=x86_64-elf
 export PATH="$PREFIX/bin:$PATH"
 
 mkdir -p build-binutils
