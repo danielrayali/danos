@@ -40,7 +40,17 @@ inline void PrintUint32(Printer& printer, const Uint32 value) {
     printer.Print('0');
     printer.Print('x');
     Uint8* value_ptr = (Uint8*)&value;
-    for (Int32 i = 3; i >= 0; --i) {
+    for (Int32 i = (sizeof(Uint32) - 1); i >= 0; --i) {
+        printer.Print(ToHex(value_ptr[i] >> 4));
+        printer.Print(ToHex(value_ptr[i] & 0xF));
+    }
+}
+
+inline void PrintUint64(Printer& printer, const Uint64 value) {
+    printer.Print('0');
+    printer.Print('x');
+    Uint8* value_ptr = (Uint8*)&value;
+    for (Int32 i = (sizeof(Uint64) - 1); i >= 0; --i) {
         printer.Print(ToHex(value_ptr[i] >> 4));
         printer.Print(ToHex(value_ptr[i] & 0xF));
     }

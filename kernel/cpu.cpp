@@ -2,61 +2,50 @@
 
 namespace danos {
 
+inline void PrintValue(const Uint32 value, const Char* name, Printer* printer) {
+    printer->Print(name);
+    printer->Print("=");
+    PrintUint32(*printer, value);
+    printer->Print("\n");
+}
+
 void DumpRegisters(Printer* printer) {
-    uint32_t eax32, ebx32, ecx32, edx32;
-    uint64_t rax64, rbx64, rcx64, rdx64;
+    Uint32 eax, ebx, ecx, edx;
+    Uint32 esp, ebp, esi, edi;
 
     asm (
-        "movl %%eax, %[a1] ;"
-        "movl %%ebx, %[b1] ;"
-        "movl %%ecx, %[c1] ;"
-        "movl %%edx, %[d1] ;"
-        "movq %%rax, %[a2] ;"
-        "movq %%rbx, %[b2] ;"
-        "movq %%rcx, %[c2] ;"
-        "movq %%rdx, %[d2] ;"
+        "movl %%eax, %[a1] ;" "movl %%ebx, %[b1] ;" "movl %%ecx, %[c1] ;" "movl %%edx, %[d1] ;"
+        "movl %%esp, %[a2] ;" "movl %%ebp, %[b2] ;" "movl %%esi, %[c2] ;" "movl %%edi, %[d2] ;"
         :
-        [a1] "=m" (eax32),
-        [b1] "=m" (ebx32),
-        [c1] "=m" (ecx32),
-        [d1] "=m" (edx32),
-        [a2] "=m" (rax64), [b2] "=m" (rbx64), [c2] "=m" (rcx64), [d2] "=m" (rdx64)
+        [a1] "=m" (eax), [b1] "=m" (ebx), [c1] "=m" (ecx), [d1] "=m" (edx),
+        [a2] "=m" (esp), [b2] "=m" (ebp), [c2] "=m" (esi), [d2] "=m" (edi)
     );
 
-    printer->Print("eax=");
-    PrintUint32(*printer, eax32);
-    printer->Print("\n");
-    printer->Print("ebx=");
-    PrintUint32(*printer, ebx32);
-    printer->Print("\n");
-    printer->Print("ecx=");
-    PrintUint32(*printer, ecx32);
-    printer->Print("\n");
-    printer->Print("edx=");
-    PrintUint32(*printer, edx32);
-    printer->Print("\n");
+    PrintValue(eax, "eax", printer);
+    PrintValue(ebx, "ebx", printer);
+    PrintValue(ecx, "ecx", printer);
+    PrintValue(edx, "edx", printer);
 
+    PrintValue(esp, "esp", printer);
+    PrintValue(ebp, "ebp", printer);
+    PrintValue(esi, "esi", printer);
+    PrintValue(edi, "edi", printer);
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wreturn-type"
-bool IsCPUIDSupported() {
-    asm (
-        "pushfl\n"
-        "pushfl\n"
-        "push %edx\n"
-        "movl $200000, %edx\n"
-        "xor %edx, (%esp)\n"
-        "popl %edx\n"
-        "popfl\n"
-        "pushfl\n"
-        "pop %eax\n"
-        "xor (%esp), %eax\n"
-        "popfl\n"
-        "and $200000, %eax\n"
-        "ret\n"
-    );
-}
-#pragma GCC diagnostic pop
+asm (
+".global IsCPUIDSupported\n"
+"IsCPUIDSupported:\n"
+    "pushfl\n"
+    "pushfl\n"
+    "xorl $0x00200000, (%esp)\n"
+    "popfl\n"
+    "pushfl\n"
+    "pop %eax\n"
+    "xorl (%esp), %eax\n"
+    "popfl\n"
+    "andl $0x00200000, %eax\n"
+    "shrl $21, %eax\n"              // Shift down to bit 0 for bool conversion
+    "ret\n"
+);
 
 }  // namespace danos

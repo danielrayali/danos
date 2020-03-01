@@ -8,7 +8,7 @@ OBJS = \
 	cpu.o
 
 CC=../build/toolchain/opt/local/bin/i686-elf-gcc
-CXXFLAGS=-I.. -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib -std=c++11 -masm=att -m64
+CXXFLAGS=-I.. -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib -std=c++11 -masm=att
 
 all: ../build/danos.bin
 

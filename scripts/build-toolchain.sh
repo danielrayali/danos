@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 mkdir -p build/toolchain
 cd build/toolchain
 
@@ -17,7 +19,7 @@ if [ ! -d $GCC_DIR ]; then
 fi
 
 export PREFIX="$PWD/opt/local"
-export TARGET=x86_64-elf
+export TARGET=i686-elf
 export PATH="$PREFIX/bin:$PATH"
 
 mkdir -p build-binutils

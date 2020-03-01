@@ -19,20 +19,16 @@
 using namespace danos;
 
 extern "C" void kernel_main(void) {
-    VgaTextBuffer vga_buffer(VgaColor::BLACK, VgaColor::LIGHT_GREEN);
-    serial_port.Print("DanOS Bootloader v0.1.0 (VGA Text Buffer)\n");
-
     SerialPort serial_port;
     serial_port.Print("DanOS Bootloader v0.1.0 (Serial Port)\n");
 
-    vga_buffer.Print("Prior to CPUID\n");
-    DumpRegisters(&vga_buffer);
-    // const bool cpuid_supported = IsCPUIDSupported();
-    // if (cpuid_supported) {
-    //     serial_port.Print("CPUID command is supported");
-    // } else {
-    //     serial_port.Print("CPUID command is not supported");
-    // }
-    // vga_buffer.Print("After CPUID\n");
-    // DumpRegisters(&vga_buffer);
+    VgaTextBuffer vga_buffer(VgaColor::BLACK, VgaColor::LIGHT_GREEN);
+    vga_buffer.Print("DanOS Bootloader v0.1.0 (VGA Text Buffer)\n");
+
+    Bool cpuid_supported = IsCPUIDSupported();
+    if (cpuid_supported) {
+        vga_buffer.Print("CPUID command is supported\n");
+    } else {
+        vga_buffer.Print("CPUID command is not supported\n");
+    }
 }
