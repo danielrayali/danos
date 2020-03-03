@@ -7,3 +7,4 @@
 - Implement global constructors and destructors
 - Receive keyboard input
 - Clean up PIC code
+- Add headers as dependencies
