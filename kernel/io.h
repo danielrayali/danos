@@ -6,7 +6,7 @@ namespace danos {
 
 class IO {
  public:
-    static inline void OutByte(const Uint16 port, const Uint8 value) {
+    static inline void Out(const Uint16 port, const Uint8 value) {
         /**
          * There's an outb %al, $imm8  encoding, for compile-time constant port numbers that fit in 8b.  (N constraint).
          * Wider immediate constants would be truncated at assemble-time (e.g. "i" constraint).
@@ -16,7 +16,7 @@ class IO {
         asm volatile ( "outb %0, %1" : : "a"(value), "Nd"(port) );
     }
 
-    static inline Uint8 InByte(const Uint16 port) {
+    static inline Uint8 In(const Uint16 port) {
         Uint8 ret;
         asm volatile ( "inb %1, %0"
                     : "=a"(ret)

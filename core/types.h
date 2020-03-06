@@ -22,3 +22,4 @@ typedef int             Int32;
 typedef long            Int64;
 
 typedef bool            Bool;
+typedef Uint8           Byte;
