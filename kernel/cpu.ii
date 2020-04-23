@@ -1,8 +1,182 @@
-#include "kernel/cpu.h"
-#include "kernel/logging.h"
-#include "core/string.h"
-#include "kernel/io.h"
-#include "kernel/keyboard_controller.h"
+# 1 "cpu.cpp"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 1 "cpu.cpp"
+# 1 "../kernel/cpu.h" 1
+       
+
+# 1 "../core/printer.h" 1
+       
+
+# 1 "../core/types.h" 1
+       
+
+typedef unsigned char uint8_t;
+typedef unsigned short uint16_t;
+typedef unsigned int uint32_t;
+typedef unsigned long uint64_t;
+
+typedef char int8_t;
+typedef short int16_t;
+typedef int int32_t;
+typedef long int64_t;
+
+typedef unsigned char Uint8;
+typedef unsigned short Uint16;
+typedef unsigned int Uint32;
+typedef unsigned long Uint64;
+
+typedef char Char;
+typedef char Int8;
+typedef short Int16;
+typedef int Int32;
+typedef long Int64;
+
+typedef bool Bool;
+typedef Uint8 Byte;
+# 4 "../core/printer.h" 2
+
+namespace danos {
+
+inline Uint64 StringLength(const Char* string) {
+    Uint64 length = 0;
+    while (string[length] != '\0') { length++; }
+    return length;
+}
+
+inline Char ToHex(Uint32 value) {
+    if (value < 10) {
+        return ('0' + value);
+    } else {
+        return ('a' + (value - 10));
+    }
+}
+
+class Printer {
+ public:
+
+    virtual void Print(const Char* string) = 0;
+
+    virtual void Print(const Char letter) = 0;
+};
+
+inline void PrintUint32At(Printer& printer, Uint32* value) {
+    printer.Print('0');
+    printer.Print('x');
+    Uint8* value_ptr = (Uint8*)value;
+    for (Int32 i = 3; i >= 0; --i) {
+        printer.Print(ToHex(value_ptr[i] >> 4));
+        printer.Print(ToHex(value_ptr[i] & 0xF));
+    }
+}
+
+}
+# 4 "../kernel/cpu.h" 2
+
+
+namespace danos {
+
+class CPU {
+ public:
+
+    static void DumpRegisters();
+
+
+    static Uint32 GetStackAddress();
+
+
+    static bool Initialize();
+};
+
+}
+# 2 "cpu.cpp" 2
+# 1 "../kernel/logging.h" 1
+       
+
+
+
+
+namespace danos {
+
+void Log(const Char character);
+
+void Log(const Char* message);
+
+void Log(const Uint32 value);
+
+void SetLogger(Printer* printer);
+
+}
+# 3 "cpu.cpp" 2
+# 1 "../core/string.h" 1
+       
+
+
+
+namespace core {
+
+
+class String {
+ public:
+    String() = default;
+
+    ~String() = default;
+
+
+    static bool Compare(const Char* left, const Char* right);
+};
+
+}
+# 4 "cpu.cpp" 2
+# 1 "../kernel/io.h" 1
+       
+
+
+
+namespace danos {
+
+class IO {
+ public:
+    static inline void Out(const Uint16 port, const Uint8 value) {
+
+
+
+
+
+
+        asm volatile ( "outb %0, %1" : : "a"(value), "Nd"(port) );
+    }
+
+    static inline Uint8 In(const Uint16 port) {
+        Uint8 ret;
+        asm volatile ( "inb %1, %0"
+                    : "=a"(ret)
+                    : "Nd"(port) );
+        return ret;
+    }
+
+    static inline void Wait(void) {
+
+
+        asm volatile ( "outb %%al, $0x80" : : "a"(0) );
+
+    }
+};
+
+}
+# 5 "cpu.cpp" 2
+# 1 "../kernel/keyboard_controller.h" 1
+       
+
+namespace danos {
+
+class KeyboardController {
+ public:
+    static void InitializeA20();
+};
+
+}
+# 6 "cpu.cpp" 2
 
 using namespace core;
 
@@ -54,13 +228,9 @@ asm (
     "xorl (%esp), %eax\n"
     "popfl\n"
     "andl $0x00200000, %eax\n"
-    "shrl $21, %eax\n"              // Shift down to bit 0 for bool conversion
+    "shrl $21, %eax\n"
     "ret\n"
 );
-
-//
-// Should I go to protected mode prior to checking this?
-//
 
 asm (
 "# Function: check_a20"
@@ -87,7 +257,7 @@ asm (
     "mov $0x0510, %si\n"
     "movb %es:(%di), %al\n"
     "push %ax\n"
-    "movb %ds:(%si), %al\n"
+    "mov al, byte [ds:si]\n"
     "push ax\n"
     "mov byte [es:di], 0x00\n"
     "mov byte [ds:si], 0xFF\n"
@@ -138,26 +308,26 @@ bool CPU::Initialize() {
         return true;
     }
 
-    // Disable non-maskable interrupts and maskable interrupts
+
     IO::Out(0x70, IO::In(0x70) | 0x80);
     asm ("cli\n");
 
-    // Check if A20 memory line has been enabled
+
     Uint32 a20_enabled = CheckA20();
     if (a20_enabled == 0) {
-        // Enable A20 line
+
         KeyboardController::InitializeA20();
     }
 
     Log("A20 memory line has been enabled\n");
 
-    // // Enter protected mode
-    // asm (
-    //     "cli\n"
-    //     "lgdt (%gdtr)\n"
-    // );
+
+
+
+
+
 
     return false;
 }
 
-}  // namespace danos
+}

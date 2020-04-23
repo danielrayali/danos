@@ -12,7 +12,7 @@ OBJS = \
 CC=../build/toolchain/opt/local/bin/i686-elf-gcc
 AS=../build/toolchain/opt/local/bin/i686-elf-as
 CXX=../build/toolchain/opt/local/bin/i686-elf-g++
-CXXFLAGS=-I.. -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib -std=c++11 -masm=att
+CXXFLAGS=-I.. -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib -std=c++11 -masm=att -save-temps
 
 all: ../build/danos.bin
 
