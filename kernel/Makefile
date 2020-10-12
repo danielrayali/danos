@@ -1,14 +1,15 @@
 OBJS = kernel.o \
-	vga_buffer.o
+	vga_buffer.o \
+	vga_terminal.o
 #	vga_text_buffer.o \
-	kernel.o \
-	bios_data.o \
-	serial_port.o \
-	programmable_interrupt_controller.o \
-	interrupt_vector_table.o \
-	cpu.o \
-	logging.o \
-	../core/string.o  # TODO(dali) Create actual core library and link to kernel
+#	kernel.o \
+#	bios_data.o \
+#	serial_port.o \
+#	programmable_interrupt_controller.o \
+#	interrupt_vector_table.o \
+#	cpu.o \
+#	logging.o \
+#	../core/string.o  # TODO(dali) Create actual core library and link to kernel
 
 CC=../build/toolchain/opt/local/bin/i686-elf-gcc
 AS=../build/toolchain/opt/local/bin/i686-elf-as

@@ -6,10 +6,7 @@ VgaBuffer::VgaBuffer(UInt16* address, const UInt32 size) :
     address_(address), 
     size_(size), 
     background_(VgaColor::BLACK), 
-    foreground_(VgaColor::WHITE)
-{ 
-    this->Clear();
-}
+    foreground_(VgaColor::WHITE) { }
 
 void VgaBuffer::Clear() {
     for (UInt32 i = 0; i < size_; ++i) {
