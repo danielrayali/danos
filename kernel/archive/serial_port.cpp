@@ -10,7 +10,7 @@ SerialPort::SerialPort() {
 }
 
 Char SerialPort::Read() {
-    return IO::InByte(io_port_);
+    return IO::In(io_port_);
 }
 
 void SerialPort::Print(const Char* string) {
@@ -21,7 +21,7 @@ void SerialPort::Print(const Char* string) {
 }
 
 void SerialPort::Print(const Char letter) {
-    IO::OutByte(io_port_, letter);
+    IO::Out(io_port_, letter);
 }
 
 }  // namespace danos

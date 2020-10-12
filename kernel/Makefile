@@ -1,5 +1,6 @@
-OBJS = \
-	vga_text_buffer.o \
+OBJS = kernel.o \
+	vga_buffer.o
+#	vga_text_buffer.o \
 	kernel.o \
 	bios_data.o \
 	serial_port.o \
@@ -25,3 +26,4 @@ all: ../build/danos.bin
 
 clean:
 	rm -rf *.o danos.bin ../build/danos.bin
+

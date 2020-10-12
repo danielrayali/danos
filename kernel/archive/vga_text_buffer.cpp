@@ -12,10 +12,10 @@ VgaTextBuffer::VgaTextBuffer(const VgaColor background, const VgaColor foregroun
 
 void VgaTextBuffer::UpdateCursor() const {
     const Uint16 pos = current_row_ * kVgaWidth + current_column_;
-    IO::OutByte(0x3D4, 0x0F);
-    IO::OutByte(0x3D5, (Uint8) (pos & 0xFF));
-    IO::OutByte(0x3D4, 0x0E);
-    IO::OutByte(0x3D5, (Uint8) ((pos >> 8) & 0xFF));
+    IO::Out(0x3D4, 0x0F);
+    IO::Out(0x3D5, (Uint8) (pos & 0xFF));
+    IO::Out(0x3D4, 0x0E);
+    IO::Out(0x3D5, (Uint8) ((pos >> 8) & 0xFF));
 }
 
 void VgaTextBuffer::SetColors(const VgaColor background, const VgaColor foreground) {
