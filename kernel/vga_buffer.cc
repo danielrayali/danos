@@ -2,29 +2,52 @@
 
 namespace danos {
 
-VgaBuffer::VgaBuffer(UInt16* address, const UInt32 size) : 
-    address_(address), 
-    size_(size), 
-    background_(VgaColor::BLACK), 
-    foreground_(VgaColor::WHITE) { }
+VgaBuffer::VgaBuffer(const Color foreground, const Color background) :
+    buffer_(reinterpret_cast<UInt16*>(0xB8000)),
+    size_(kWidth*kHeight),
+    x_(0),
+    y_(0),
+    foreground_(foreground),
+    background_(background) { 
+    this->FindCurrentPosition();
+}
 
-void VgaBuffer::Clear() {
-    for (UInt32 i = 0; i < size_; ++i) {
-        address_[i] = ' ';
+void VgaBuffer::AdvanceLine() {
+    y_++;
+    if (y_ == kHeight) {
+        // TODO(dali) Implement history
+        y_--;
+    }
+    x_ = 0;
+}
+
+void VgaBuffer::Put(const char data) {
+    if (data == '\n') {
+        this->AdvanceLine();
+        return;
+    }
+
+    const UInt16 color = static_cast<UInt16>(foreground_) | (static_cast<UInt16>(background_) << 4);
+    buffer_[y_*kWidth + x_] = data | (color << 8);
+    x_++;
+    if (x_ == kWidth) {
+        this->AdvanceLine();
     }
 }
 
-void VgaBuffer::SetForegroundColor(const VgaColor foreground) {
-    foreground_ = foreground;
-}
-
-void VgaBuffer::SetBackgroundColor(const VgaColor background) {
-    background_ = background;
-}
-
-void VgaBuffer::SetByte(const UInt32 position, const char data) {
-    const UInt16 color = foreground_ | (background_ << 4);
-    address_[position] = data | (color << 8);
+void VgaBuffer::FindCurrentPosition() {
+    for (UInt32 y = 0; y < kHeight; ++y) {
+        for (UInt32 x = 0; x < kWidth; ++x) {
+            if ((buffer_[y*kWidth + x] & 0x00ff) != ' ') {
+                x_ = x;
+                y_ = y;
+            }
+        }
+    }
+    
+    if ((y_ != 0) && (x_ != 0)) {
+        this->AdvanceLine();
+    }
 }
 
 }  // namespace danos

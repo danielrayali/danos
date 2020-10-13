@@ -1,5 +1,7 @@
 OBJS = kernel.o \
 	vga_buffer.o \
+	kprint.o \
+	abi.o \
 	vga_terminal.o
 #	vga_text_buffer.o \
 #	kernel.o \
@@ -18,7 +20,7 @@ CXXFLAGS=-I.. -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdl
 
 all: ../build/danos.bin
 
-%.o: %.cpp
+%.o: %.cc
 	$(CC) -c -o $@ $< $(CFLAGS) $(CXXFLAGS)
 
 ../build/danos.bin: $(OBJS)

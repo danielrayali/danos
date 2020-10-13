@@ -1,27 +1,23 @@
 #pragma once
 
-#include "types.h"
+#include "terminal.h"
 #include "vga_buffer.h"
 
 namespace danos {
 
-class VgaTerminal {
+/**
+ * Terminal adapter for VgaBuffer
+ */
+class VgaTerminal : public Terminal {
  public:
- 	static VgaTerminal& Default();	
+    VgaTerminal();
 
- 	VgaTerminal();
+    virtual ~VgaTerminal() = default;
 
- 	~VgaTerminal() = default;
-
- 	void Print(const char letter);
-
- 	void Print(const char* string, const UInt64 size);
-
- 	void Print(const char* string);
+    void Print(const char* message) override;
 
  private:
- 	VgaBuffer vga_buffer_;
-    UInt64 position_ = 0;
+    VgaBuffer vga_buffer_;
 };
-	
+
 }  // namespace danos

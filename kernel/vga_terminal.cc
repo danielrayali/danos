@@ -1,25 +1,15 @@
 #include "vga_terminal.h"
+#include "types.h"
 
 namespace danos {
 
-VgaTerminal::VgaTerminal() {
-    vga_buffer_.Clear();
-}
+VgaTerminal::VgaTerminal() : vga_buffer_(VgaBuffer::Color::LIGHT_GREEN, VgaBuffer::Color::BLACK) { }
 
-void VgaTerminal::Print(const char letter) {
-    vga_buffer_.SetByte(position_++, letter);
-}
-
-void VgaTerminal::Print(const char* string, const UInt64 size) {
-    for (UInt64 i = 0; i < size; ++i) {
-        this->Print(string[i]);
+void VgaTerminal::Print(const char* message) {
+    for (UInt32 i = 0; message[i] != '\0'; i++) {
+        vga_buffer_.Put(message[i]);
     }
 }
 
-void VgaTerminal::Print(const char* string) {
-    for (UInt64 i = 0; string[i] != '\0'; ++i) {
-        this->Print(string[i]);
-    }
-}
-
+    
 }  // namespace danos
