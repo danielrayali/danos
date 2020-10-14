@@ -1,4 +1,6 @@
 #include "vga_buffer.h"
+#include "io.h"
+#include "types.h"
 
 namespace danos {
 
@@ -8,11 +10,15 @@ VgaBuffer::VgaBuffer(const Color foreground, const Color background) :
     x_(0),
     y_(0),
     foreground_(foreground),
-    background_(background) { 
+    background_(background) {
     this->FindCurrentPosition();
     for (UInt32 i = 0; i < kWidth; ++i) {
         erased_line_[i] = ' ';
     }
+}
+
+UInt16 VgaBuffer::GetColor() const {
+    return static_cast<UInt16>(foreground_) | (static_cast<UInt16>(background_) << 4);
 }
 
 bool VgaBuffer::Put(const char data) {
@@ -21,7 +27,7 @@ bool VgaBuffer::Put(const char data) {
         return true;
     }
 
-    const UInt16 color = static_cast<UInt16>(foreground_) | (static_cast<UInt16>(background_) << 4);
+    const UInt16 color = GetColor();
     buffer_[y_ * kWidth + x_] = data | (color << 8);
 
     x_++;
@@ -29,7 +35,8 @@ bool VgaBuffer::Put(const char data) {
         this->AdvanceLine();
         return true;
     }
-    
+
+    this->UpdateCursor();
     return false;
 }
 
@@ -52,6 +59,7 @@ void VgaBuffer::AdvanceLine() {
         y_--;
     }
     x_ = 0;
+    this->UpdateCursor();
 }
 
 void VgaBuffer::FindCurrentPosition() {
@@ -63,10 +71,26 @@ void VgaBuffer::FindCurrentPosition() {
             }
         }
     }
-    
+
     if ((y_ != 0) && (x_ != 0)) {
         this->AdvanceLine();
     }
+
+    this->UpdateCursor();
+}
+
+void VgaBuffer::UpdateCursor() {
+    UInt16 pos = y_ * kWidth + x_;
+
+    // Set cursor color
+    const UInt16 color = GetColor();
+    buffer_[y_ * kWidth + x_] = (buffer_[y_ * kWidth + x_] & 0x00ff) | (color << 8);
+
+    // Update cursor using VGA IO ports
+    IO::Out(static_cast<UInt16>(0x3D4), 0x0F);
+    IO::Out(static_cast<UInt16>(0x3D5), static_cast<UInt8>(pos & 0xFF));
+    IO::Out(static_cast<UInt16>(0x3D4), 0x0E);
+    IO::Out(static_cast<UInt16>(0x3D5), static_cast<UInt8>((pos >> 8) & 0xFF));
 }
 
 }  // namespace danos

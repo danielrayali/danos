@@ -2,7 +2,8 @@ OBJS = kernel.o \
 	vga_buffer.o \
 	kprint.o \
 	abi.o \
-	vga_terminal.o
+	vga_terminal.o \
+	io.o
 #	vga_text_buffer.o \
 #	kernel.o \
 #	bios_data.o \

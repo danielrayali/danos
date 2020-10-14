@@ -33,7 +33,7 @@ class VgaBuffer {
 
     ~VgaBuffer() = default;
 
-    /** 
+    /**
      * @brief Put at the end of the buffer
      * @param data The data to put
      * @return True if the buffer ran out of space and advanced all lines, false otherwise
@@ -50,6 +50,8 @@ class VgaBuffer {
  private:
     void AdvanceLine();
     void FindCurrentPosition();
+    void UpdateCursor();
+    UInt16 GetColor() const;
 
     UInt16* buffer_;
     const UInt32 size_;
