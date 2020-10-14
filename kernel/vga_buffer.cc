@@ -6,12 +6,11 @@ namespace danos {
 
 VgaBuffer::VgaBuffer(const Color foreground, const Color background) :
     buffer_(reinterpret_cast<UInt16*>(0xB8000)),
-    size_(kWidth*kHeight),
     x_(0),
     y_(0),
     foreground_(foreground),
     background_(background) {
-    this->FindCurrentPosition();
+    this->FindStartPosition();
     for (UInt32 i = 0; i < kWidth; ++i) {
         erased_line_[i] = ' ';
     }
@@ -62,7 +61,7 @@ void VgaBuffer::AdvanceLine() {
     this->UpdateCursor();
 }
 
-void VgaBuffer::FindCurrentPosition() {
+void VgaBuffer::FindStartPosition() {
     for (UInt32 y = 0; y < kHeight; ++y) {
         for (UInt32 x = 0; x < kWidth; ++x) {
             if ((buffer_[y*kWidth + x] & 0x00ff) != ' ') {

@@ -48,13 +48,12 @@ class VgaBuffer {
     char* GetErasedLine() const;
 
  private:
+    void FindStartPosition();
     void AdvanceLine();
-    void FindCurrentPosition();
     void UpdateCursor();
     UInt16 GetColor() const;
 
     UInt16* buffer_;
-    const UInt32 size_;
     UInt32 x_;
     UInt32 y_;
     Color foreground_;
