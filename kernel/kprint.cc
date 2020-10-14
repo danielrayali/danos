@@ -13,5 +13,5 @@ void SetTerminal(Terminal* terminal) {
 void KPrint(const char* message) {
     g_terminal->Print(message);
 }
-    
+
 }  // namespace danos

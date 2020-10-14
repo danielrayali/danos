@@ -25,20 +25,31 @@ class VgaBuffer {
         WHITE = 15
     };
 
-    const UInt32 kWidth = 80;
+    static const UInt32 kWidth = 80;
 
-    const UInt32 kHeight = 25;
+    static const UInt32 kHeight = 25;
 
     VgaBuffer(const Color foreground, const Color background);
 
     ~VgaBuffer() = default;
 
-    void Put(const char data);
+    /** 
+     * @brief Put at the end of the buffer
+     * @param data The data to put
+     * @return True if the buffer ran out of space and advanced all lines, false otherwise
+     */
+    bool Put(const char data);
+
+    /**
+     * @brief Returns the last line that was erased
+     * @return The line that was erased
+     * @note Use after Put() returns true to save history of the buffer elsewhere
+     */
+    char* GetErasedLine() const;
 
  private:
-    void FindCurrentPosition();
-
     void AdvanceLine();
+    void FindCurrentPosition();
 
     UInt16* buffer_;
     const UInt32 size_;
@@ -46,6 +57,7 @@ class VgaBuffer {
     UInt32 y_;
     Color foreground_;
     Color background_;
+    char erased_line_[kWidth];
 };
 
 }  // namespace danos
