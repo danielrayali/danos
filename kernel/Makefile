@@ -1,4 +1,4 @@
-OBJS = kernel.o \
+OBJS = init.o \
 	vga_buffer.o \
 	kprint.o \
 	abi.o \

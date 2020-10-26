@@ -2,6 +2,11 @@
 #include "terminal.h"
 #include "vga_buffer.h"
 
+extern "C" int kprint(const char* message) {
+    danos::KPrint(message);
+    return 0;
+}
+
 namespace danos {
 
 Terminal* g_terminal = nullptr;

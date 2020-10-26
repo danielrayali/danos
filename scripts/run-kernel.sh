@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# TODO(dali) Add checks for the danos.bin
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-# qemu-system-i386 -nographic -kernel $DIR/../build/danos.bin
-qemu-system-i386 -kernel $DIR/../build/danos.bin
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+if [[ ! -f "$SCRIPT_DIR/../build/danos.bin" ]]; then
+    echo "Must build kernel image before running it on qemu"
+    exit 1
+fi
+qemu-system-i386 -kernel $SCRIPT_DIR/../build/danos.bin
