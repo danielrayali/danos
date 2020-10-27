@@ -3,21 +3,22 @@ OBJS = init.o \
 	kprint.o \
 	abi.o \
 	vga_terminal.o \
-	io.o
-#	vga_text_buffer.o \
-#	kernel.o \
-#	bios_data.o \
-#	serial_port.o \
-#	programmable_interrupt_controller.o \
-#	interrupt_vector_table.o \
-#	cpu.o \
-#	logging.o \
-#	../core/string.o  # TODO(dali) Create actual core library and link to kernel
+	io.o \
+	global_descriptor_table.o \
+	crt0.o \
+	crti.o \
+	crtn.o
 
 CC=../build/toolchain/opt/local/bin/i686-elf-gcc
 AS=../build/toolchain/opt/local/bin/i686-elf-as
 CXX=../build/toolchain/opt/local/bin/i686-elf-g++
-CXXFLAGS=-I.. -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib -std=c++11 -masm=att
+CXXFLAGS=-I.. -ffreestanding -O2 -Wall -Wextra -fno-exceptions -fno-rtti -nostdlib -std=c++11 -masm=att -m64
+
+CRTI_OBJ=crti.o
+CRTBEGIN_OBJ:=$(shell $(CC) $(CFLAGS) -print-file-name=crtbegin.o)
+CRTEND_OBJ:=$(shell $(CC) $(CFLAGS) -print-file-name=crtend.o)
+CRTN_OBJ=crtn.o
+OBJS+=$(CRTI_OBJ) $(CRTBEGIN_OBJ) $(CRTEND_OBJ) $(CRTN_OBJ)
 
 all: ../build/danos.bin
 

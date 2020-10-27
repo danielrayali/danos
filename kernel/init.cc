@@ -1,7 +1,10 @@
 #include "kprint.h"
 #include "vga_terminal.h"
+#include "global_descriptor_table.h"
 
 using namespace danos;
+
+static GlobalDescriptorTable gdt;
 
 extern "C" void init() {
     // Setup VGA terminal for KPrint
@@ -27,5 +30,6 @@ extern "C" void init() {
         return;
     }
     KPrint("Multiboot image verified\n");
+
     return;
 }
